@@ -1,6 +1,6 @@
 import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
-import '';
+
 
 void main() {
   runApp(const MyApp());
@@ -94,15 +94,78 @@ class _MyHomePageState extends State<MyHomePage> {
 
 
 
-class Page1 extends StatelessWidget {
+class Page1 extends StatefulWidget {
   const Page1({super.key});
+
+  @override
+  State<Page1> createState() => _Page1State();
+}
+
+class _Page1State extends State<Page1> with TickerProviderStateMixin{
+
+   late final AnimationController controller = AnimationController(
+      duration: Duration(seconds: 2),
+      vsync: this);
+
+   late final Animation<double> _animation;
+
+      final Tween<double> _tween  = Tween(
+      begin: 0.0,
+      end: 1.0 );
+
+    @override
+  void initState() {
+    // TODO: implement initState
+    _animation = _tween.animate(controller);
+    controller.forward();
+    super.initState();
+  }
+  Future pickdate(BuildContext context){
+    
+    return showDialog(
+      context: context, 
+      builder: (context){
+        return FadeTransition(
+          opacity: _animation,
+          child: DatePickerDialog(
+            initialDate: DateTime.now(), 
+            firstDate: DateTime.now().subtract(Duration(days: 4000)), 
+            lastDate: DateTime.now().add(Duration(days:  50))
+            ),
+        );
+      });
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.deepPurple.withOpacity(.4),
-      body: const Center(
-        child: Text('data'),
+      body: Center(
+        child: InkWell(
+          onTap: (){
+            pickdate(context);
+          },
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(12),
+            color: Colors.deepPurple,
+            ),
+            child: FittedBox(fit: BoxFit.contain,
+            child: Padding(
+              padding: EdgeInsets.fromLTRB(24, 12, 24, 12),
+              child: Text('Pick a date',
+              style: TextStyle(
+                color: Colors.white
+              ),),),),
+          ),
+        )
       ),
     );
   }
