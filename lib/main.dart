@@ -193,31 +193,10 @@ enum MusicFilterValues {All, Songs, Albums, Artists}
 
 class _SearchPageState extends State<SearchPage> {
 
-  MusicFilterValues selectedValue = MusicFilterValues.All;
+  
 
 
-  List<ButtonSegment<MusicFilterValues>> musicFilterButtons = [
-    const ButtonSegment(
-      value: MusicFilterValues.All,
-      label: Text(
-        'All'
-      )),
-    const ButtonSegment(
-      value: MusicFilterValues.Songs,
-      label: Text(
-        'Songs'
-      )),
-    const ButtonSegment(
-      value: MusicFilterValues.Albums,
-      label: Text(
-        'Albums'
-      )),
-    const ButtonSegment(
-      value: MusicFilterValues.Artists,
-      label: Text(
-        'Artists'
-      )),
-  ];
+  
 
 
   int selectedIdex = 0;
@@ -228,35 +207,43 @@ class _SearchPageState extends State<SearchPage> {
       backgroundColor: Colors.deepOrange.withOpacity(.4),
       body:  SafeArea(
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            SegmentedButton(
-              segments: musicFilterButtons, 
-              selected: <MusicFilterValues>{selectedValue},
-              onSelectionChanged: (Set<MusicFilterValues> newSelection){
-                setState(() {
-                  selectedValue = newSelection.first;
-                });
-                Expanded(
-                  child: Center(
-                    child: IconButton(
-                      onPressed: (){
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  PageTransitionSwitcher(
+                    transitionBuilder: (
+                      child, primaryAnim, secAnim
+                    ){
+                    return FadeThroughTransition(
+                      animation: primaryAnim, 
+                      secondaryAnimation: secAnim,
+                      child: child,);
+
+                    },
+                    child: InkWell(
+                      onTap: (){
                         Navigator.push(
                           context, 
                           MaterialPageRoute(
                             builder: (context) => Result()));
                       },
-                      icon: Icon(
-                        Icons.arrow_forward,
-                        color: Colors.red,),),
-                  ));
-              },),
-            Container(
-              decoration: const BoxDecoration(
-                color: Colors.blue
+                      child: const CircleAvatar(
+                        radius: 28,
+                        backgroundColor: Colors.purple,
+                        child: Icon(
+                          Icons.person_2_outlined,
+                          color: Colors.white,),
+                      ),
+                    ),
+                  ),
+                ],
               ),
-              child: Text(''),
             )
+              
+            
            ],),
       )
     );
