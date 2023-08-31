@@ -115,7 +115,6 @@ class _Page1State extends State<Page1> with TickerProviderStateMixin{
 
     @override
   void initState() {
-    // TODO: implement initState
     _animation = _tween.animate(controller);
     controller.forward();
     super.initState();
@@ -183,16 +182,101 @@ class Page2 extends StatelessWidget {
     );
   }
 }
-class SearchPage extends StatelessWidget {
+class SearchPage extends StatefulWidget {
   SearchPage({super.key});
+
+  @override
+  State<SearchPage> createState() => _SearchPageState();
+}
+
+enum MusicFilterValues {All, Songs, Albums, Artists}
+
+class _SearchPageState extends State<SearchPage> {
+
+  MusicFilterValues selectedValue = MusicFilterValues.All;
+
+
+  List<ButtonSegment<MusicFilterValues>> musicFilterButtons = [
+    const ButtonSegment(
+      value: MusicFilterValues.All,
+      label: Text(
+        'All'
+      )),
+    const ButtonSegment(
+      value: MusicFilterValues.Songs,
+      label: Text(
+        'Songs'
+      )),
+    const ButtonSegment(
+      value: MusicFilterValues.Albums,
+      label: Text(
+        'Albums'
+      )),
+    const ButtonSegment(
+      value: MusicFilterValues.Artists,
+      label: Text(
+        'Artists'
+      )),
+  ];
+
+
+  int selectedIdex = 0;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.deepOrange.withOpacity(.4),
-      body: const Center(
+      body:  SafeArea(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            SegmentedButton(
+              segments: musicFilterButtons, 
+              selected: <MusicFilterValues>{selectedValue},
+              onSelectionChanged: (Set<MusicFilterValues> newSelection){
+                setState(() {
+                  selectedValue = newSelection.first;
+                });
+                Expanded(
+                  child: Center(
+                    child: IconButton(
+                      onPressed: (){
+                        Navigator.push(
+                          context, 
+                          MaterialPageRoute(
+                            builder: (context) => Result()));
+                      },
+                      icon: Icon(
+                        Icons.arrow_forward,
+                        color: Colors.red,),),
+                  ));
+              },),
+            Container(
+              decoration: const BoxDecoration(
+                color: Colors.blue
+              ),
+              child: Text(''),
+            )
+           ],),
+      )
+    );
+  }
+
+  
+}
+
+class Result extends StatelessWidget {
+  const Result({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.blue.withOpacity(.4),
+      body: Center(
         child: Text('data'),
       ),
     );
   }
 }
+
+
