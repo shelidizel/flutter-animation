@@ -214,6 +214,7 @@ class _SearchPageState extends State<SearchPage> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   PageTransitionSwitcher(
+                    duration: Duration(milliseconds: 550),
                     transitionBuilder: (
                       child, primaryAnim, secAnim
                     ){
